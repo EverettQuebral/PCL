@@ -1415,48 +1415,49 @@ void IntegrationFile::Open( const String& path, const String& drzPath, const Ima
 
 void IntegrationFile::ToDrizzleData( File& f ) const
 {
-   f.OutText( "m{" );
+   String buffer;
+   buffer.append( "m{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         f.OutText( IsoString().Format( "%.16g}", m_location[i] ) );
+         buffer.append( IsoString().Format( "%.16g}", m_location[i] ) );
          break;
       }
-      f.OutText( IsoString().Format( "%.16g,", m_location[i] ) );
+      buffer.append( IsoString().Format( "%.16g,", m_location[i] ) );
    }
 
-   f.OutText( "m0{" );
+   buffer.append( "m0{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         f.OutText( IsoString().Format( "%.16g}", s_files[0]->m_location[i] ) );
+         buffer.append( IsoString().Format( "%.16g}", s_files[0]->m_location[i] ) );
          break;
       }
-      f.OutText( IsoString().Format( "%.16g,", s_files[0]->m_location[i] ) );
+      buffer.append( IsoString().Format( "%.16g,", s_files[0]->m_location[i] ) );
    }
 
-   f.OutText( "s{" );
+   buffer.append( "s{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         f.OutText( IsoString().Format( "%.16g}", m_scale[i] ) );
+         buffer.append( IsoString().Format( "%.16g}", m_scale[i] ) );
          break;
       }
-      f.OutText( IsoString().Format( "%.16g,", m_scale[i] ) );
+      buffer.append( IsoString().Format( "%.16g,", m_scale[i] ) );
    }
 
-   f.OutText( "w{" );
+   buffer.append( "w{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         f.OutText( IsoString().Format( "%.16g}", m_weight[i]/s_files[0]->m_weight[i] ) );
+         buffer.append( IsoString().Format( "%.16g}", m_weight[i]/s_files[0]->m_weight[i] ) );
          break;
       }
-      f.OutText( IsoString().Format( "%.16g,", m_weight[i]/s_files[0]->m_weight[i] ) );
+      buffer.append( IsoString().Format( "%.16g,", m_weight[i]/s_files[0]->m_weight[i] ) );
    }
 
    /*
@@ -1467,10 +1468,10 @@ void IntegrationFile::ToDrizzleData( File& f ) const
     * have to be responsive to a potential abort request from the user.
     */
 
-   f.OutText( "Rl{" );
+   buffer.append( "Rl{" );
    for ( int i = 0; i < s_numberOfChannels; ++i )
    {
-      f.OutText( "{" );
+      buffer.append( "{" );
       if ( !m_drzLowRejectionData[i].IsEmpty() )
       {
          Console console;
@@ -1486,20 +1487,20 @@ void IntegrationFile::ToDrizzleData( File& f ) const
             const Point& p = m_drzLowRejectionData[i][j];
             if ( k == m_drzLowRejectionData[i].Length() )
             {
-               f.OutText( IsoString().Format( "%d,%d", p.x, p.y ) );
+               buffer.append( IsoString().Format( "%d,%d", p.x, p.y ) );
                break;
             }
-            f.OutText( IsoString().Format( "%d,%d,", p.x, p.y ) );
+            buffer.append( IsoString().Format( "%d,%d,", p.x, p.y ) );
          }
       }
-      f.OutText( "}" );
+      buffer.append( "}" );
    }
-   f.OutText( "}" );
+   buffer.append( "}" );
 
-   f.OutText( "Rh{" );
+   buffer.append( "Rh{" );
    for ( int i = 0; i < s_numberOfChannels; ++i )
    {
-      f.OutText( "{" );
+      buffer.append( "{" );
       if ( !m_drzHighRejectionData[i].IsEmpty() )
       {
          Console console;
@@ -1515,15 +1516,16 @@ void IntegrationFile::ToDrizzleData( File& f ) const
             const Point& p = m_drzHighRejectionData[i][j];
             if ( k == m_drzHighRejectionData[i].Length() )
             {
-               f.OutText( IsoString().Format( "%d,%d", p.x, p.y ) );
+               buffer.append( IsoString().Format( "%d,%d", p.x, p.y ) );
                break;
             }
-            f.OutText( IsoString().Format( "%d,%d,", p.x, p.y ) );
+            buffer.append( IsoString().Format( "%d,%d,", p.x, p.y ) );
          }
       }
-      f.OutText( "}" );
+      buffer.append( "}" );
    }
-   f.OutText( "}" );
+   buffer.append( "}" );
+   f.OutText(buffer);
 }
 
 double IntegrationFile::KeywordValue( const IsoString& keyName )
