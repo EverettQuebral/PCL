@@ -1416,48 +1416,48 @@ void IntegrationFile::Open( const String& path, const String& drzPath, const Ima
 void IntegrationFile::ToDrizzleData( File& f ) const
 {
    String buffer;
-   buffer.append( "m{" );
+   buffer.Append( "m{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         buffer.append( IsoString().Format( "%.16g}", m_location[i] ) );
+         buffer.Append( IsoString().Format( "%.16g}", m_location[i] ) );
          break;
       }
-      buffer.append( IsoString().Format( "%.16g,", m_location[i] ) );
+      buffer.Append( IsoString().Format( "%.16g,", m_location[i] ) );
    }
 
-   buffer.append( "m0{" );
+   buffer.Append( "m0{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         buffer.append( IsoString().Format( "%.16g}", s_files[0]->m_location[i] ) );
+         buffer.Append( IsoString().Format( "%.16g}", s_files[0]->m_location[i] ) );
          break;
       }
-      buffer.append( IsoString().Format( "%.16g,", s_files[0]->m_location[i] ) );
+      buffer.Append( IsoString().Format( "%.16g,", s_files[0]->m_location[i] ) );
    }
 
-   buffer.append( "s{" );
+   buffer.Append( "s{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         buffer.append( IsoString().Format( "%.16g}", m_scale[i] ) );
+         buffer.Append( IsoString().Format( "%.16g}", m_scale[i] ) );
          break;
       }
-      buffer.append( IsoString().Format( "%.16g,", m_scale[i] ) );
+      buffer.Append( IsoString().Format( "%.16g,", m_scale[i] ) );
    }
 
-   buffer.append( "w{" );
+   buffer.Append( "w{" );
    for ( int i = 0, j = 1; ; ++i, ++j )
    {
       if ( j == s_numberOfChannels )
       {
-         buffer.append( IsoString().Format( "%.16g}", m_weight[i]/s_files[0]->m_weight[i] ) );
+         buffer.Append( IsoString().Format( "%.16g}", m_weight[i]/s_files[0]->m_weight[i] ) );
          break;
       }
-      buffer.append( IsoString().Format( "%.16g,", m_weight[i]/s_files[0]->m_weight[i] ) );
+      buffer.Append( IsoString().Format( "%.16g,", m_weight[i]/s_files[0]->m_weight[i] ) );
    }
 
    /*
@@ -1468,10 +1468,10 @@ void IntegrationFile::ToDrizzleData( File& f ) const
     * have to be responsive to a potential abort request from the user.
     */
 
-   buffer.append( "Rl{" );
+   buffer.Append( "Rl{" );
    for ( int i = 0; i < s_numberOfChannels; ++i )
    {
-      buffer.append( "{" );
+      buffer.Append( "{" );
       if ( !m_drzLowRejectionData[i].IsEmpty() )
       {
          Console console;
@@ -1487,20 +1487,20 @@ void IntegrationFile::ToDrizzleData( File& f ) const
             const Point& p = m_drzLowRejectionData[i][j];
             if ( k == m_drzLowRejectionData[i].Length() )
             {
-               buffer.append( IsoString().Format( "%d,%d", p.x, p.y ) );
+               buffer.Append( IsoString().Format( "%d,%d", p.x, p.y ) );
                break;
             }
-            buffer.append( IsoString().Format( "%d,%d,", p.x, p.y ) );
+            buffer.Append( IsoString().Format( "%d,%d,", p.x, p.y ) );
          }
       }
-      buffer.append( "}" );
+      buffer.Append( "}" );
    }
-   buffer.append( "}" );
+   buffer.Append( "}" );
 
-   buffer.append( "Rh{" );
+   buffer.Append( "Rh{" );
    for ( int i = 0; i < s_numberOfChannels; ++i )
    {
-      buffer.append( "{" );
+      buffer.Append( "{" );
       if ( !m_drzHighRejectionData[i].IsEmpty() )
       {
          Console console;
@@ -1516,15 +1516,15 @@ void IntegrationFile::ToDrizzleData( File& f ) const
             const Point& p = m_drzHighRejectionData[i][j];
             if ( k == m_drzHighRejectionData[i].Length() )
             {
-               buffer.append( IsoString().Format( "%d,%d", p.x, p.y ) );
+               buffer.Append( IsoString().Format( "%d,%d", p.x, p.y ) );
                break;
             }
-            buffer.append( IsoString().Format( "%d,%d,", p.x, p.y ) );
+            buffer.Append( IsoString().Format( "%d,%d,", p.x, p.y ) );
          }
       }
-      buffer.append( "}" );
+      buffer.Append( "}" );
    }
-   buffer.append( "}" );
+   buffer.Append( "}" );
    f.OutText(buffer);
 }
 
